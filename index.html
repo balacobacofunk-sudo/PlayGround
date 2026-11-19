@@ -47,6 +47,13 @@
     {name:'T-Rex Verde',color:0x367d38,scale:1.38,rarity:'Épico',rarityKey:'epico',icon:'🐲'},
     {name:'T-Rex Supremo',color:0x244f2d,scale:1.65,rarity:'Mítico',rarityKey:'mitico',icon:'👑'}
   ];
+  const collection=[
+    {name:'Raptor Verde',rarity:'Comum',rarityKey:'common',icon:'🦖',unlock:1},{name:'Velociraptor',rarity:'Comum',rarityKey:'common',icon:'🦎',unlock:1},{name:'Compsognato',rarity:'Comum',rarityKey:'common',icon:'🐾',unlock:2},{name:'Oviraptor',rarity:'Comum',rarityKey:'common',icon:'🥚',unlock:2},{name:'Dryosaurus',rarity:'Comum',rarityKey:'common',icon:'🦌',unlock:3},
+    {name:'Raptor Alpha',rarity:'Incomum',rarityKey:'incomum',icon:'🦖',unlock:2},{name:'Dilophosaurus',rarity:'Incomum',rarityKey:'incomum',icon:'🦕',unlock:3},{name:'Allosaurus',rarity:'Incomum',rarityKey:'incomum',icon:'🐺',unlock:3},{name:'Ceratosaurus',rarity:'Incomum',rarityKey:'incomum',icon:'🐲',unlock:4},{name:'Herrerasaurus',rarity:'Incomum',rarityKey:'incomum',icon:'🦴',unlock:4},
+    {name:'Carnotaurus',rarity:'Raro',rarityKey:'raro',icon:'🐊',unlock:3},{name:'Baryonyx',rarity:'Raro',rarityKey:'raro',icon:'🐟',unlock:4},{name:'Suchomimus',rarity:'Raro',rarityKey:'raro',icon:'🐊',unlock:4},{name:'Giganotossauro',rarity:'Raro',rarityKey:'raro',icon:'🦁',unlock:5},{name:'Acrocantossauro',rarity:'Raro',rarityKey:'raro',icon:'🐆',unlock:5},
+    {name:'T-Rex Verde',rarity:'Épico',rarityKey:'epico',icon:'🐲',unlock:4},{name:'Espinossauro',rarity:'Épico',rarityKey:'epico',icon:'🦈',unlock:4},{name:'Mapusaurus',rarity:'Épico',rarityKey:'epico',icon:'🔥',unlock:5},{name:'Anquilossauro',rarity:'Épico',rarityKey:'epico',icon:'🛡️',unlock:5},{name:'Tricerátopo',rarity:'Épico',rarityKey:'epico',icon:'🐂',unlock:5},
+    {name:'T-Rex Supremo',rarity:'Mítico',rarityKey:'mitico',icon:'👑',unlock:5},{name:'Indominus Rex',rarity:'Mítico',rarityKey:'mitico',icon:'💎',unlock:5},{name:'Indoraptor',rarity:'Mítico',rarityKey:'mitico',icon:'🌑',unlock:5},{name:'Dino Celestial',rarity:'Mítico',rarityKey:'mitico',icon:'⭐',unlock:5},{name:'T-Rex Sombrio',rarity:'Mítico',rarityKey:'mitico',icon:'🌋',unlock:5}
+  ];
   let level=1,xp=0,money=0,active=false,gameOver=false;
   function makeDino(){const g=new THREE.Group();const col=levels[level-1].color;const mat=new THREE.MeshStandardMaterial({color:col,roughness:.7});const dark=new THREE.MeshStandardMaterial({color:0x27592f});
     const body=new THREE.Mesh(new THREE.SphereGeometry(1.15,16,10),mat);body.scale.set(1.25,1,1.5);body.position.y=.95;body.castShadow=true;g.add(body);
@@ -72,7 +79,7 @@
     camera.position.lerp(new THREE.Vector3(dino.position.x,dino.position.y+9,dino.position.z+13),.06);camera.lookAt(dino.position.x,dino.position.y+.7,dino.position.z);
     const need=100+(level-1)*75;document.querySelector('#xp').style.width=Math.min(100,xp/need*100)+'%';document.querySelector('#lv').textContent='LV '+level;document.querySelector('#money').textContent=money;document.querySelector('#dinoName').textContent=levels[level-1].name;document.querySelector('#levelName').textContent=level+' • '+levels[level-1].name;
     renderer.render(scene,camera)}update();
-  function renderDex(){const grid=document.querySelector('#dexGrid');grid.innerHTML=levels.map((d,i)=>`<div class="dexItem ${i>=level?'locked':''}"><span class="dinoIcon">${d.icon}</span><b>${d.name}</b><small class="${d.rarityKey}">${i>=level?'🔒 ':''}${d.rarity.toUpperCase()}</small></div>`).join('')}
+  function renderDex(){const grid=document.querySelector('#dexGrid');grid.innerHTML=collection.map(d=>`<div class="dexItem ${d.unlock>level?'locked':''}"><span class="dinoIcon">${d.icon}</span><b>${d.name}</b><small class="${d.rarityKey}">${d.unlock>level?'🔒 ':''}${d.rarity.toUpperCase()}</small></div>`).join('')}
   document.querySelector('#dexButton').addEventListener('pointerdown',e=>{e.preventDefault();if(active){renderDex();document.querySelector('#dex').style.display='flex';active=false}});
   document.querySelector('.dexClose').addEventListener('pointerdown',()=>{document.querySelector('#dex').style.display='none';active=true});
   document.querySelector('#play').addEventListener('pointerdown',()=>{document.querySelector('#start').style.display='none';active=true});
