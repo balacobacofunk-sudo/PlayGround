@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Carnotaurus — Ilha Jurássica</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#8fb1b7;font-family:Arial,sans-serif}canvas{display:block}#ui{position:fixed;inset:0;pointer-events:none;color:#fff;text-shadow:0 2px 4px #000}#top{position:absolute;top:18px;left:20px;right:20px;display:flex;justify-content:space-between}.badge{background:rgba(12,24,21,.72);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:10px 14px;backdrop-filter:blur(8px)}.label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#cbd9cd}.value{font-weight:800;font-size:18px}#bar{width:180px;height:8px;border-radius:8px;background:#26352e;margin-top:6px;overflow:hidden}#health{height:100%;width:100%;background:linear-gradient(90deg,#e85d45,#f4b84a);transition:.2s}#quest{position:absolute;left:20px;top:92px;width:250px}.quest-row{margin-top:7px;font-size:13px;color:#e8eee8}#cross{position:absolute;left:50%;top:50%;width:5px;height:5px;border:1px solid rgba(255,255,255,.7);border-radius:50%;transform:translate(-50%,-50%)}#controls{position:absolute;right:20px;bottom:20px;text-align:right;font-size:12px;line-height:1.8;display:none}#prompt{position:absolute;left:50%;bottom:25%;transform:translateX(-50%);background:rgba(0,0,0,.55);border-radius:20px;padding:9px 16px;font-size:13px;opacity:0;transition:.15s}#prompt.show{opacity:1}#joystick{position:absolute;left:24px;bottom:24px;width:118px;height:118px;border-radius:50%;background:rgba(20,35,29,.28);border:2px solid rgba(255,255,255,.22);display:none;pointer-events:auto}#stick{position:absolute;width:54px;height:54px;left:32px;top:32px;border-radius:50%;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.7)}#bite{position:absolute;right:24px;bottom:28px;width:82px;height:82px;border-radius:50%;background:rgba(135,48,35,.48);border:2px solid rgba(255,255,255,.4);display:none;pointer-events:auto;color:#fff;font-weight:800;font-size:13px;text-align:center;padding-top:29px}#start{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:9vh;pointer-events:auto;background:linear-gradient(transparent 45%,rgba(7,18,14,.72));transition:.5s}#card{text-align:center}.eyebrow{font-size:12px;letter-spacing:5px;text-transform:uppercase}.title{font-family:Georgia,serif;font-size:54px;font-weight:700;line-height:.9;margin:12px 0 22px;text-shadow:0 4px 18px #000}button{border:1px solid rgba(255,255,255,.6);border-radius:999px;background:rgba(30,58,40,.82);color:#fff;padding:13px 25px;font-size:14px;font-weight:800;letter-spacing:1px;cursor:pointer;pointer-events:auto;box-shadow:0 8px 30px rgba(0,0,0,.25)}@media(max-width:800px){#top{top:10px;left:10px;right:10px}.badge{padding:8px 10px}.badge:last-child{display:none}#bar{width:120px}#quest{left:10px;top:67px;width:210px}#controls{display:none}#joystick,#bite{display:block}.title{font-size:39px}.quest-row{font-size:12px}}
-</style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#8fb1b7;font-family:Arial,sans-serif}canvas{display:block;position:fixed;inset:0;z-index:0}#ui{position:fixed;inset:0;z-index:1;pointer-events:none;color:#fff;text-shadow:0 2px 4px #000}#top{position:absolute;top:18px;left:20px;right:20px;display:flex;justify-content:space-between}.badge{background:rgba(12,24,21,.72);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:10px 14px;backdrop-filter:blur(8px)}.label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#cbd9cd}.value{font-weight:800;font-size:18px}#bar{width:180px;height:8px;border-radius:8px;background:#26352e;margin-top:6px;overflow:hidden}#health{height:100%;width:100%;background:linear-gradient(90deg,#e85d45,#f4b84a);transition:.2s}#quest{position:absolute;left:20px;top:92px;width:250px}.quest-row{margin-top:7px;font-size:13px;color:#e8eee8}#cross{position:absolute;left:50%;top:50%;width:5px;height:5px;border:1px solid rgba(255,255,255,.7);border-radius:50%;transform:translate(-50%,-50%)}#controls{position:absolute;right:20px;bottom:20px;text-align:right;font-size:12px;line-height:1.8}#prompt{position:absolute;left:50%;bottom:25%;transform:translateX(-50%);background:rgba(0,0,0,.55);border-radius:20px;padding:9px 16px;font-size:13px;opacity:0;transition:.15s}#prompt.show{opacity:1}#joystick{position:absolute;left:24px;bottom:24px;width:118px;height:118px;border-radius:50%;background:rgba(20,35,29,.28);border:2px solid rgba(255,255,255,.22);display:none;pointer-events:auto;touch-action:none}#stick{position:absolute;width:54px;height:54px;left:32px;top:32px;border-radius:50%;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.7)}#bite{position:absolute;right:24px;bottom:28px;width:82px;height:82px;border-radius:50%;background:rgba(135,48,35,.48);border:2px solid rgba(255,255,255,.4);display:none;pointer-events:auto;touch-action:none;color:#fff;font-weight:800;font-size:13px;text-align:center;padding-top:29px}#start{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:9vh;pointer-events:auto;background:linear-gradient(transparent 45%,rgba(7,18,14,.72));transition:.5s}#card{text-align:center}.eyebrow{font-size:12px;letter-spacing:5px;text-transform:uppercase}.title{font-family:Georgia,serif;font-size:54px;font-weight:700;line-height:.9;margin:12px 0 22px;text-shadow:0 4px 18px #000}button{border:1px solid rgba(255,255,255,.6);border-radius:999px;background:rgba(30,58,40,.82);color:#fff;padding:13px 25px;font-size:14px;font-weight:800;letter-spacing:1px;cursor:pointer;pointer-events:auto;box-shadow:0 8px 30px rgba(0,0,0,.25)}@media(max-width:800px){#top{top:10px;left:10px;right:10px}.badge{padding:8px 10px}.badge:last-child{display:none}#bar{width:120px}#quest{left:10px;top:67px;width:210px}#controls{display:none}#joystick,#bite{display:block}.title{font-size:39px}.quest-row{font-size:12px}}
+#card{animation:rise .9s ease-out}@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}#card .subtitle{font-size:14px;letter-spacing:1px;margin:-8px 0 24px;color:#dce8df}#card .title span{color:#d29a63}#ui:not(.playing) #top,#ui:not(.playing) #quest,#ui:not(.playing) #cross,#ui:not(.playing) #controls,#ui:not(.playing) #prompt{display:none}#start{background:linear-gradient(180deg,rgba(10,18,17,.12) 30%,rgba(8,20,14,.88) 100%)}</style>
 </head>
 <body>
 <div id="ui">
@@ -14,12 +14,13 @@
 <div id="cross"></div><div id="prompt">Espaço — atacar</div>
 <div id="controls">WASD / setas — mover<br>Mouse — olhar<br>Shift — correr<br>Espaço — atacar</div>
 <div id="joystick"><div id="stick"></div></div><div id="bite">MORDER</div>
-<div id="start"><div id="card"><div class="eyebrow">Sobrevivência jurássica</div><div class="title">ISLA<br>BRUTÁRIA</div><button id="play">Entrar na ilha</button></div></div>
+<div id="start"><div id="card"><div class="eyebrow">Província Jurássica • 68 milhões de anos atrás</div><div class="title">CAÇADOR<br><span>PRIMITIVO</span></div><div class="subtitle">Sobreviva. Cace. Domine o território.</div><button id="play">Começar a caçada</button></div></div>
 </div>
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import * as THREE from 'https://esm.sh/three@0.160.0';
+import { GLTFLoader } from 'https://esm.sh/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x91b4b7);scene.fog=new THREE.FogExp2(0x91b4b7,.012);
-const camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.1,600);const renderer=new THREE.WebGLRenderer({antialoid:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;document.body.appendChild(renderer.domElement);renderer.domElement.style.position='absolute';renderer.domElement.style.zIndex='-1';
+const camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.1,600);const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;document.body.appendChild(renderer.domElement);renderer.domElement.style.position='fixed';renderer.domElement.style.inset='0';renderer.domElement.style.zIndex='0';
 scene.add(new THREE.HemisphereLight(0xcfe4dc,0x48603c,2.2));const sun=new THREE.DirectionalLight(0xfff1c5,3);sun.position.set(-70,90,35);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-100;sun.shadow.camera.right=100;sun.shadow.camera.top=100;sun.shadow.camera.bottom=-100;scene.add(sun);
 const ground=new THREE.Mesh(new THREE.PlaneGeometry(350,350),new THREE.MeshStandardMaterial({color:0x65814b,roughness:.95}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
 // terrain ridges
@@ -38,24 +39,74 @@ for(const z of [-1,1]){const leg=new THREE.Mesh(new THREE.CapsuleGeometry(big?.5
 const tail=new THREE.Mesh(new THREE.ConeGeometry(big?1.15:.55,big?7:3.5,8),mat);tail.rotation.z=-Math.PI/2-.12;tail.position.set(big?-5:-2.6,big?2.8:1.7,0);tail.castShadow=true;g.add(tail);g.userData.tail=tail;return g}
 const player=makeDino(true);player.position.set(0,0,0);scene.add(player);
 const prey=[],predators=[];
-for(let i=0;i<18;i++){const p=makeDino(false);p.position.set((Math.random()-.5)*230,0,(Math.random()-.5)*230);p.scale.setScalar(.55+.15*Math.random());p.rotation.y=Math.random()*6.28;prey.push(p);scene.add(p)}
-for(let i=0;i<5;i++){const d=makeDino(false);d.position.set((Math.random()-.5)*220,0,(Math.random()-.5)*220);d.scale.setScalar(.8);d.userData.predator=true;predators.push(d);scene.add(d)}
+for(let i=0;i<8;i++){const p=makeDino(false);p.position.set((Math.random()-.5)*230,0,(Math.random()-.5)*230);p.scale.setScalar(.55+.15*Math.random());p.rotation.y=Math.random()*6.28;prey.push(p);scene.add(p)}
+for(let i=0;i<3;i++){const d=makeDino(false);d.position.set((Math.random()-.5)*220,0,(Math.random()-.5)*220);d.scale.setScalar(.8);d.userData.predator=true;predators.push(d);scene.add(d)}
+
+// Modelo realista CC Attribution (Wormhole Studio)
+const loader=new GLTFLoader();
+loader.load('/public/models/carnotaurus.glb',gltf=>{
+  const template=gltf.scene;
+  // Um dente solto no GLB tem vértices deslocados a mais de 100 unidades;
+  // removê-lo evita que ele distorça a escala e o enquadramento do animal.
+  const outliers=[];
+  template.traverse(o=>{
+    if(!o.isMesh)return;
+    o.geometry.computeBoundingBox();
+    const dimensions=new THREE.Vector3();o.geometry.boundingBox.getSize(dimensions);
+    if(Math.max(dimensions.x,dimensions.y,dimensions.z)>50)outliers.push(o);
+  });
+  outliers.forEach(o=>o.parent?.remove(o));
+  template.updateMatrixWorld(true);
+  const box=new THREE.Box3().setFromObject(template);
+  const size=new THREE.Vector3();box.getSize(size);
+  const center=new THREE.Vector3();box.getCenter(center);
+  // Centraliza o corpo horizontalmente e apoia os pés no chão.
+  template.position.set(-center.x,-box.min.y,-center.z);
+
+  function equipReal(dino,big=false){
+    dino.children.forEach(child=>child.visible=false);
+    const wrapper=new THREE.Group();
+    const model=template.clone(true);
+    const scale=(big?10.5:5.8)/Math.max(size.x,size.y,size.z);
+    model.scale.setScalar(scale);
+    model.rotation.y=Math.PI/2;
+    model.position.y=.05;
+    model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;o.frustumCulled=false}});
+    wrapper.add(model);dino.add(wrapper);
+    dino.userData.real=true;
+    if(gltf.animations.length){
+      const mixer=new THREE.AnimationMixer(model);
+      mixer.clipAction(gltf.animations[0]).play();
+      dino.userData.mixer=mixer;
+    }
+  }
+  equipReal(player,true);
+  prey.forEach(p=>equipReal(p,false));
+  predators.forEach(d=>equipReal(d,false));
+},undefined,error=>console.error('Erro ao carregar Carnotaurus:',error));
+
 // distant birds
 const birds=[];for(let i=0;i<12;i++){const b=new THREE.Mesh(new THREE.ConeGeometry(.25,1.2,3),new THREE.MeshBasicMaterial({color:0x3f3f36,side:THREE.DoubleSide}));b.rotation.z=Math.PI/2;b.position.set((Math.random()-.5)*150,35+Math.random()*25,(Math.random()-.5)*150);birds.push(b);scene.add(b)}
 let yaw=0,pitch=.35,health=100,xp=0,kills=0,started=false,last=performance.now(),keys={},touch={x:0,y:0},attacking=false;
-camera.position.set(0,12,-18);camera.lookAt(player.position);
-addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space')attack()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+camera.position.set(0,14,-26);camera.lookAt(player.position);
+addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space'){e.preventDefault();attack()}});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 addEventListener('mousemove',e=>{if(started&&document.pointerLockElement===renderer.domElement){yaw-=e.movementX*.0025;pitch=Math.max(.05,Math.min(.8,pitch-e.movementY*.0015))}});
-renderer.domElement.addEventListener('click',()=>{if(started)renderer.domElement.requestPointerLock()});
-document.getElementById('play').addEventListener('click',e=>{e.stopPropagation();started=true;document.getElementById('start').style.opacity='0';setTimeout(()=>document.getElementById('start').style.display='none',500);renderer.domElement.requestPointerLock()});
+renderer.domElement.addEventListener('click',()=>{if(started&&!matchMedia('(pointer:coarse)').matches)renderer.domElement.requestPointerLock?.()});
+document.getElementById('play').addEventListener('click',e=>{e.stopPropagation();started=true;yaw=0;pitch=.35;player.rotation.y=-Math.PI/2;document.getElementById('ui').classList.add('playing');document.getElementById('start').style.opacity='0';setTimeout(()=>document.getElementById('start').style.display='none',500);if(!matchMedia('(pointer:coarse)').matches)renderer.domElement.requestPointerLock?.()});
 document.getElementById('bite').addEventListener('pointerdown',attack);
 const joy=document.getElementById('joystick'),stick=document.getElementById('stick');let joyId=null;
-joy.addEventListener('pointerdown',e=>{joyId=e.pointerId;joy.setPointerCapture(e.pointerId);moveJoy(e)});joy.addEventListener('pointermove',e=>{if(e.pointerId===joyId)moveJoy(e)});joy.addEventListener('pointerup',()=>{joyId=null;touch.x=touch.y=0;stick.style.transform=''});
+joy.addEventListener('pointerdown',e=>{joyId=e.pointerId;try{joy.setPointerCapture(e.pointerId)}catch{}moveJoy(e)});joy.addEventListener('pointermove',e=>{if(e.pointerId===joyId)moveJoy(e)});joy.addEventListener('pointerup',()=>{joyId=null;touch.x=touch.y=0;stick.style.transform=''});joy.addEventListener('pointercancel',()=>{joyId=null;touch.x=touch.y=0;stick.style.transform=''});
 function moveJoy(e){const r=joy.getBoundingClientRect(),x=e.clientX-(r.left+r.width/2),y=e.clientY-(r.top+r.height/2),d=Math.min(38,Math.hypot(x,y)),a=Math.atan2(y,x);touch.x=Math.cos(a)*d/38;touch.y=-Math.sin(a)*d/38;stick.style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`}
+let lookPointerId=null,lookX=0,lookY=0;
+addEventListener('pointerdown',e=>{if(!started||e.pointerType!=='touch'||e.clientX<innerWidth*.42||e.target.closest?.('#bite,#joystick'))return;lookPointerId=e.pointerId;lookX=e.clientX;lookY=e.clientY;try{e.target.setPointerCapture?.(e.pointerId)}catch{}});
+addEventListener('pointermove',e=>{if(e.pointerId!==lookPointerId)return; yaw-=(e.clientX-lookX)*.006;pitch=Math.max(.05,Math.min(.8,pitch-(e.clientY-lookY)*.004));lookX=e.clientX;lookY=e.clientY});
+addEventListener('pointerup',e=>{if(e.pointerId===lookPointerId)lookPointerId=null});addEventListener('pointercancel',e=>{if(e.pointerId===lookPointerId)lookPointerId=null});
 function attack(){if(!started||attacking)return;attacking=true;document.getElementById('prompt').classList.remove('show');setTimeout(()=>attacking=false,650);let hit=false;for(let i=prey.length-1;i>=0;i--){const p=prey[i],dist=p.position.distanceTo(player.position);if(dist<7){p.visible=false;prey.splice(i,1);xp+=20;kills++;hit=true}}if(hit){const level=1+Math.floor(xp/100);document.getElementById('level').textContent=level;document.getElementById('score').textContent=xp;document.getElementById('counter').textContent=Math.min(kills,5)+' / 5';if(kills>=5){document.getElementById('objective').textContent='Sobreviveu à caçada';document.getElementById('counter').textContent='Completado'}}}
-function animate(now){requestAnimationFrame(animate);const dt=Math.min(.05,(now-last)/1000);last=now;if(started){const forward=(keys.w||keys.arrowup?1:0)-(keys.s||keys.arrowdown?1:0)-touch.y;const strafe=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+touch.x;const speed=(keys.shift?15:8);if(forward||strafe){const angle=yaw-Math.atan2(strafe,forward);const mag=Math.hypot(forward,strafe)||1;player.position.x+=Math.sin(angle)*speed*dt*(forward/Math.abs(forward||1)||0)*Math.abs(mag);player.position.z-=Math.cos(angle)*speed*dt*(forward/Math.abs(forward||1)||0)*Math.abs(mag);player.position.x+=strafe*speed*dt*.7;player.position.z-=forward*speed*dt*.7;player.rotation.y=yaw-Math.PI/2}player.position.x=Math.max(-155,Math.min(155,player.position.x));player.position.z=Math.max(-155,Math.min(155,player.position.z));
+function animate(now){requestAnimationFrame(animate);const dt=Math.min(.05,(now-last)/1000);last=now;
+[player,...prey,...predators].forEach(d=>{if(d.userData.mixer)d.userData.mixer.update(dt)});
+if(started){const forward=(keys.w||keys.arrowup?1:0)-(keys.s||keys.arrowdown?1:0)+touch.y;const strafe=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+touch.x;const speed=(keys.shift?15:8);const magnitude=Math.hypot(forward,strafe);if(magnitude){const f=forward/magnitude,s=strafe/magnitude,dx=Math.sin(yaw)*f+Math.cos(yaw)*s,dz=Math.cos(yaw)*f-Math.sin(yaw)*s;player.position.x+=dx*speed*dt;player.position.z+=dz*speed*dt;player.rotation.y=Math.atan2(dx,dz)-Math.PI/2}player.position.x=Math.max(-155,Math.min(155,player.position.x));player.position.z=Math.max(-155,Math.min(155,player.position.z));
 if(attacking){player.userData.legs&&player.userData.legs.forEach((l,i)=>l.rotation.z=.12+Math.sin(now*.04+i)*.35);player.scale.x=1+Math.sin(now*.03)*.06}else player.scale.x+= (1-player.scale.x)*.15;
-const target=new THREE.Vector3(player.position.x-Math.sin(yaw)*18*Math.cos(pitch),player.position.y+10*Math.sin(pitch)+5,player.position.z-Math.cos(yaw)*18*Math.cos(pitch));camera.position.lerp(target,.08);camera.lookAt(player.position.x,player.position.y+4,player.position.z);
+const target=new THREE.Vector3(player.position.x-Math.sin(yaw)*26*Math.cos(pitch),player.position.y+10*Math.sin(pitch)+5,player.position.z-Math.cos(yaw)*26*Math.cos(pitch));camera.position.lerp(target,.08);camera.lookAt(player.position.x,player.position.y+4,player.position.z);
 for(const p of prey){if(p.visible&&p.position.distanceTo(player.position)<28){const a=Math.atan2(player.position.x-p.position.x,player.position.z-p.position.z);p.position.x-=Math.sin(a)*dt*2.5;p.position.z-=Math.cos(a)*dt*2.5;p.rotation.y=a}}
 for(const d of predators){const dist=d.position.distanceTo(player.position);if(dist<35){const a=Math.atan2(player.position.x-d.position.x,player.position.z-d.position.z);d.position.x+=Math.sin(a)*dt*3;d.position.z+=Math.cos(a)*dt*3;d.rotation.y=a;if(dist<5&&!attacking){health-=dt*12;document.getElementById('health').style.width=Math.max(0,health)+'%'}}}
 let near=false;for(const p of prey)if(p.visible&&p.position.distanceTo(player.position)<7)near=true;document.getElementById('prompt').classList.toggle('show',near&&window.innerWidth>800)}else{yaw+=dt*.12;camera.position.set(Math.sin(yaw)*28,12,Math.cos(yaw)*28);camera.lookAt(0,3,0)}
