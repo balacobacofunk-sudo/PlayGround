@@ -16,6 +16,8 @@
     #bite{position:absolute;right:24px;bottom:max(38px,calc(env(safe-area-inset-bottom) + 18px));width:98px;height:98px;border-radius:50%;border:5px solid rgba(255,255,255,.85);background:linear-gradient(145deg,#ffb93f,#e84e32);color:white;font-size:20px;font-weight:1000;text-shadow:0 2px 2px #7a2800;pointer-events:auto;box-shadow:0 8px 20px rgba(90,35,20,.35)}#bite:active{transform:scale(.94)}
     #toast{position:absolute;left:50%;bottom:190px;transform:translateX(-50%) translateY(20px);opacity:0;padding:10px 16px;border-radius:12px;background:#1d332ddf;font-weight:900;text-align:center;transition:.25s;white-space:nowrap}#toast.show{opacity:1;transform:translateX(-50%)}
     #start{position:absolute;inset:0;background:linear-gradient(180deg,rgba(83,171,210,.2),rgba(41,91,62,.72));display:flex;align-items:center;justify-content:center;text-align:center;color:white;pointer-events:auto}#startCard{width:min(380px,calc(100% - 38px));padding:26px 22px;border:3px solid rgba(255,255,255,.4)}#start h1{margin:0;font-size:42px;line-height:.95;text-shadow:0 4px #315b3d}#start p{font-size:15px;margin:12px 0 18px}#play{border:0;border-radius:18px;padding:14px 34px;background:#ffcf3d;color:#4a3a14;font-size:20px;font-weight:1000;box-shadow:0 6px 0 #c58a21;pointer-events:auto}
+    #dexButton{position:absolute;right:14px;bottom:max(150px,calc(env(safe-area-inset-bottom) + 145px));width:64px;height:64px;border:3px solid rgba(255,255,255,.8);border-radius:18px;background:linear-gradient(145deg,#43c66a,#247a48);color:white;font-weight:1000;font-size:11px;pointer-events:auto;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+    #dex{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(13,31,26,.82);backdrop-filter:blur(12px);pointer-events:auto;color:white;z-index:20}#dexCard{width:min(430px,calc(100% - 24px));max-height:calc(100% - 30px);overflow:auto;padding:16px;border:2px solid rgba(255,255,255,.25)}#dex h2{margin:0 0 12px;text-align:center}#dexGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.dexItem{position:relative;padding:12px 8px;border-radius:13px;border:2px solid #ffffff22;background:#ffffff12;text-align:center;min-height:92px}.dexItem.locked{filter:saturate(.15);opacity:.55}.dexItem b{display:block;font-size:14px}.dexItem small{display:block;margin-top:5px;font-weight:900}.common{color:#bde0b8}.incomum{color:#72df72}.raro{color:#65aaff}.epico{color:#c68cff}.mitico{color:#ffdd58;text-shadow:0 0 12px #ff9d00}.dinoIcon{font-size:30px;display:block;margin-bottom:-2px}.dexClose{width:100%;margin-top:10px;border:0;border-radius:12px;padding:11px;background:#ffcf3d;color:#4a3a14;font-weight:1000}
   </style>
 </head>
 <body>
@@ -23,11 +25,13 @@
   <div id="hud">
     <div id="top"><div id="stats" class="panel"><div class="name"><span id="dinoName">Raptor Verde</span><span id="lv">LV 1</span></div><div class="xpbar"><i id="xp"></i></div></div><div id="coins" class="panel"><i class="coin"></i><span id="money">0</span></div></div>
     <div id="levelName" class="panel">1 • Raptor Jovem</div>
+    <button id="dexButton">ÍNDICE</button>
     <div id="controls"><div id="stick"></div></div>
     <button id="bite">MORDER</button>
     <div id="toast" class="panel">+25 XP</div>
   </div>
   <div id="start"><div id="startCard" class="panel"><h1>DINO<br>EVOLUÇÃO</h1><p>Caça humanos, ganhe XP e abra baús.<br>Cada presa vale uma recompensa diferente.</p><button id="play">JOGAR</button></div></div>
+  <div id="dex"><div id="dexCard" class="panel"><h2>ÍNDICE DE DINOSSAUROS</h2><div id="dexGrid"></div><button class="dexClose">FECHAR</button></div></div>
   <script type="module">
   import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
   const canvas=document.querySelector('#game'), scene=new THREE.Scene();scene.background=new THREE.Color(0x83c8e7);scene.fog=new THREE.Fog(0x83c8e7,18,48);
@@ -36,7 +40,13 @@
   scene.add(new THREE.HemisphereLight(0xdff4ff,0x5b7945,2));const sun=new THREE.DirectionalLight(0xfffacd,2.5);sun.position.set(-10,20,8);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
   const ground=new THREE.Mesh(new THREE.CircleGeometry(24,48),new THREE.MeshStandardMaterial({color:0x72ad48,roughness:.9}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
   for(let i=0;i<20;i++){const x=(Math.random()-.5)*42,z=(Math.random()-.5)*42;if(Math.hypot(x,z)<8)continue;const t=new THREE.Mesh(new THREE.ConeGeometry(.55,.7,5),new THREE.MeshStandardMaterial({color:i%2?0x4f8737:0x638f3a}));t.position.set(x,.35,z);scene.add(t)}
-  const levels=[{name:'Raptor Jovem',color:0x62c36b,scale:.75},{name:'Raptor Alpha',color:0x3ba94f,scale:.92},{name:'Carnotaurus',color:0x8eaa45,scale:1.12},{name:'T-Rex Verde',color:0x367d38,scale:1.38},{name:'T-Rex Supremo',color:0x244f2d,scale:1.65}];
+  const levels=[
+    {name:'Raptor Jovem',color:0x62c36b,scale:.75,rarity:'Comum',rarityKey:'common',icon:'🦖'},
+    {name:'Raptor Alpha',color:0x3ba94f,scale:.92,rarity:'Incomum',rarityKey:'incomum',icon:'🦎'},
+    {name:'Carnotaurus',color:0x8eaa45,scale:1.12,rarity:'Raro',rarityKey:'raro',icon:'🐊'},
+    {name:'T-Rex Verde',color:0x367d38,scale:1.38,rarity:'Épico',rarityKey:'epico',icon:'🐲'},
+    {name:'T-Rex Supremo',color:0x244f2d,scale:1.65,rarity:'Mítico',rarityKey:'mitico',icon:'👑'}
+  ];
   let level=1,xp=0,money=0,active=false,gameOver=false;
   function makeDino(){const g=new THREE.Group();const col=levels[level-1].color;const mat=new THREE.MeshStandardMaterial({color:col,roughness:.7});const dark=new THREE.MeshStandardMaterial({color:0x27592f});
     const body=new THREE.Mesh(new THREE.SphereGeometry(1.15,16,10),mat);body.scale.set(1.25,1,1.5);body.position.y=.95;body.castShadow=true;g.add(body);
@@ -53,7 +63,7 @@
   addEventListener('keydown',e=>keys[e.code]=true);addEventListener('keyup',e=>keys[e.code]=false);
   const controls=document.querySelector('#controls'),stickEl=document.querySelector('#stick');function moveStick(e){const r=controls.getBoundingClientRect(),p=e.touches?e.touches[0]:e;let x=p.clientX-(r.left+r.width/2),y=p.clientY-(r.top+r.height/2);const l=Math.hypot(x,y),m=55;if(l>m){x=x/l*m;y=y/l*m}stick={x:x/m,y:y/m};stickEl.style.transform=`translate(${x}px,${y}px)`}controls.addEventListener('pointerdown',e=>{stickOn=true;controls.setPointerCapture(e.pointerId);moveStick(e)});controls.addEventListener('pointermove',e=>{if(stickOn)moveStick(e)});controls.addEventListener('pointerup',()=>{stickOn=false;stick={x:0,y:0};stickEl.style.transform=''});
   function bite(){if(!active)return;let found=null,min=2.05;for(const p of people){if(!p.userData.alive)continue;const d=dino.position.distanceTo(p.position);if(d<min){found=p;min=d}}if(found){found.userData.alive=false;found.visible=false;xp+=found.userData.xp;toast(`+${found.userData.xp} XP`);setTimeout(()=>{if(active){scene.remove(found);people[people.indexOf(found)]=person()}},700)}else{for(const c of chests){if(!c.userData.open&&dino.position.distanceTo(c.position)<2){openChest(c);break}}}}
-  document.querySelector('#bite').addEventListener('pointerdown',e=>{e.prevent.preventDefault;bite()});
+  document.querySelector('#bite').addEventListener('pointerdown',e=>{e.preventDefault();bite()});
   function openChest(c){c.userData.open=true;c.children[1].rotation.x=-1.2;const reward=Math.random();if(reward>.58){money+=level*50+25;toast(`BAÚ: +${level*50+25} moedas`)}else{if(level<5){level++;xp=0;scene.remove(dino);dino=makeDino();dino.position.copy(new THREE.Vector3(0,0,0));scene.add(dino);toast('BAÚ: NOVO DINOSSAURO!')}else{money+=150;toast('BAÚ: +150 moedas')}}setTimeout(()=>{c.userData.open=false;c.children[1].rotation.x=-.12;c.position.set((Math.random()-.5)*26,.05,(Math.random()-.5)*26)},3500)}
   let last=performance.now();function toast(s){const t=document.querySelector('#toast');t.textContent=s;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),1100)}
   function update(){requestAnimationFrame(update);const now=performance.now(),dt=Math.min((now-last)/1000,.04);last=now;if(active){let dx=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0)+stick.x;let dz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0)+stick.y;const l=Math.hypot(dx,dz);if(l>.05){dx/=Math.max(1,l);dz/=Math.max(1,l);dino.position.x+=dx*5.2*dt;dino.position.z+=dz*5.2*dt;dino.rotation.y=Math.atan2(dx,dz);dino.children.forEach(c=>{if(c.userData.leg)c.rotation.x=Math.sin(now*.012)*.35})}dino.position.x=THREE.MathUtils.clamp(dino.position.x,-22,22);dino.position.z=THREE.MathUtils.clamp(dino.position.z,-22,22);
@@ -62,6 +72,9 @@
     camera.position.lerp(new THREE.Vector3(dino.position.x,dino.position.y+9,dino.position.z+13),.06);camera.lookAt(dino.position.x,dino.position.y+.7,dino.position.z);
     const need=100+(level-1)*75;document.querySelector('#xp').style.width=Math.min(100,xp/need*100)+'%';document.querySelector('#lv').textContent='LV '+level;document.querySelector('#money').textContent=money;document.querySelector('#dinoName').textContent=levels[level-1].name;document.querySelector('#levelName').textContent=level+' • '+levels[level-1].name;
     renderer.render(scene,camera)}update();
+  function renderDex(){const grid=document.querySelector('#dexGrid');grid.innerHTML=levels.map((d,i)=>`<div class="dexItem ${i>=level?'locked':''}"><span class="dinoIcon">${d.icon}</span><b>${d.name}</b><small class="${d.rarityKey}">${i>=level?'🔒 ':''}${d.rarity.toUpperCase()}</small></div>`).join('')}
+  document.querySelector('#dexButton').addEventListener('pointerdown',e=>{e.preventDefault();if(active){renderDex();document.querySelector('#dex').style.display='flex';active=false}});
+  document.querySelector('.dexClose').addEventListener('pointerdown',()=>{document.querySelector('#dex').style.display='none';active=true});
   document.querySelector('#play').addEventListener('pointerdown',()=>{document.querySelector('#start').style.display='none';active=true});
   addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
   </script>
